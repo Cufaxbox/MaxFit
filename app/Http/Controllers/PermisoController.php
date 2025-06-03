@@ -18,10 +18,10 @@ class PermisoController extends Controller
         return view('permisos.create');
     }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'nombre' => 'required|string|max:45', // Solo validar 'nombre'
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:45', 
     ]);
 
     Permiso::create(['nombre' => $request->nombre]); // Guardar solo 'nombre'

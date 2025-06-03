@@ -9,7 +9,11 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-
+                    @if (session('success'))
+                    <x-alertas.success>
+                        {{ session('success') }}
+                    </x-alertas.success>
+                    @endif
                 <a href="{{ route('permisos.create') }}" wire:navigate
                     class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
                     + Nuevo Permiso
