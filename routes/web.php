@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\PermisoController;
+use App\Http\Controllers\ModuloController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
@@ -13,6 +14,8 @@ Route::view('profile', 'profile')
     ->name('profile');
 /// aca vamos a ir agregando las nuevas rutas
 Route::resource('permisos', PermisoController::class);
+Route::resource('modulos', ModuloController::class);
+
 //Route::resource('roles', RoleController::class);
 
 
