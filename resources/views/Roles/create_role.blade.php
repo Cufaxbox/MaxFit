@@ -4,7 +4,7 @@
             Crear Nuevo Rol
         </h2>
     </x-slot>
-   <div class="py-4">
+    <div class="py-4">
         <livewire:roles.create />
     </div>
 </x-app-layout>

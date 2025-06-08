@@ -35,7 +35,8 @@ class ModuloController extends Controller
         return view('modulos.edit', compact('modulo'));
     }
 
-    public function update(Request $request, $id_modulos) {
+    public function update(Request $request, $id_modulos)
+    {
         $modulo = Modulo::findOrFail($id_modulos);
         $modulo->update($request->all());
 

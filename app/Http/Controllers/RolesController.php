@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
@@ -32,8 +33,8 @@ class RolesController extends Controller
 
     public function edit($id)
     {
-        $rol = Rol::findOrFail($id); 
-        return view('roles.edit_role', compact('rol')); 
+        $rol = Rol::findOrFail($id);
+        return view('roles.edit_role', compact('rol'));
     }
 
 
@@ -45,20 +46,20 @@ class RolesController extends Controller
         return redirect()->route('roles.index')->with('success', 'Rol actualizado correctamente.');
     }
 
-public function destroy($id)
-{
-    $rol = Rol::find($id);
+    public function destroy($id)
+    {
+        $rol = Rol::find($id);
 
-    if (!$rol) {
-        return redirect()->route('roles.index')->with('error', 'Rol no encontrado.');
+        if (!$rol) {
+            return redirect()->route('roles.index')->with('error', 'Rol no encontrado.');
+        }
+
+        // Eliminar relaciones en `modulo_permiso_rol`
+        DB::table('modulo_permiso_rol')->where('id_roles', $rol->id_roles)->delete();
+
+        // Eliminar el rol
+        $rol->delete();
+
+        return redirect()->route('roles.index')->with('success', 'Rol eliminado correctamente.');
     }
-
-    // Eliminar relaciones en `modulo_permiso_rol`
-    DB::table('modulo_permiso_rol')->where('id_roles', $rol->id_roles)->delete();
-
-    // Eliminar el rol
-    $rol->delete();
-
-    return redirect()->route('roles.index')->with('success', 'Rol eliminado correctamente.');
-}
 }

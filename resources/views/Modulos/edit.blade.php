@@ -15,11 +15,11 @@
 
                         <label for="nombre" class="block text-gray-700">Nombre:</label>
                         <input type="text" name="nombre" id="nombre" value="{{ $modulo->nombre }}"
-                               class="border border-gray-300 rounded w-full p-2" required>
+                            class="border border-gray-300 rounded w-full p-2" required>
 
                         <label for="descripcion" class="block text-gray-700 mt-4">Descripción:</label>
                         <textarea name="descripcion" id="descripcion"
-                                  class="border border-gray-300 rounded w-full p-2">{{ $modulo->descripcion }}</textarea>
+                            class="border border-gray-300 rounded w-full p-2">{{ $modulo->descripcion }}</textarea>
 
                         <!-- Botón de actualizar -->
                         <button type="submit"

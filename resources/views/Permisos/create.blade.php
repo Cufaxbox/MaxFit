@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900">
                     <form action="{{ route('permisos.store') }}" method="POST">
                         @csrf
-                        
+
                         <div class="mb-4">
                             <label for="nombre" class="block text-gray-700">Nombre:</label>
                             <input type="text" name="nombre" id="nombre" class="border border-gray-300 rounded w-full p-2" required>
@@ -20,7 +20,7 @@
                         <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">
                             Guardar Permiso
                         </button>
-                        
+
                         <a href="{{ route('permisos.index') }}" wire:navigate
                             class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
                             Cancelar

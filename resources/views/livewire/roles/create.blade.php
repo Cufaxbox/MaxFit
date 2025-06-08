@@ -19,17 +19,17 @@
                 <form class="mb-5" wire:submit.prevent="saveRole">
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Nombre del rol</label>
-                            <input type="text" wire:model="nombre" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Nombre del rol" />
-                                @error('nombre') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        <input type="text" wire:model="nombre" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Nombre del rol" />
+                        @error('nombre') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">Descripción del rol</label>
                         <input type="text" wire:model.defer="descripcion"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="Descripción del rol" />
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Descripción del rol" />
                     </div>
                 </form>
 
@@ -41,26 +41,26 @@
                             <tr>
                                 <th class="border px-4 py-2 text-left">Módulo</th>
                                 @foreach ($permisos as $permiso)
-                                    <th class="border px-4 py-2 text-center">{{ $permiso->nombre }}</th>
+                                <th class="border px-4 py-2 text-center">{{ $permiso->nombre }}</th>
                                 @endforeach
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($modulos as $modulo)
-                                <tr>
-                                    <td class="border px-4 py-2 font-semibold">
-                                        <label>
-                                            <input type="checkbox" wire:model="selectedModulos" value="{{ $modulo->id_modulos }}" />
-                                            {{ $modulo->nombre }}
-                                        </label>
-                                    </td>
-                                    @foreach ($permisos as $permiso)
-                                    <td class="border px-4 py-2 text-center">
-                                            <input type="checkbox" wire:model="selectedPermisos.{{$modulo->id_modulos}}.{{$permiso->id_permisos}}" 
-                                            wire:key="{{ $modulo->id_modulos }}-{{ $permiso->id_permisos }}" />
-                                    </td>
-                                    @endforeach
-                                </tr>
+                            <tr>
+                                <td class="border px-4 py-2 font-semibold">
+                                    <label>
+                                        <input type="checkbox" wire:model="selectedModulos" value="{{ $modulo->id_modulos }}" />
+                                        {{ $modulo->nombre }}
+                                    </label>
+                                </td>
+                                @foreach ($permisos as $permiso)
+                                <td class="border px-4 py-2 text-center">
+                                    <input type="checkbox" wire:model="selectedPermisos.{{$modulo->id_modulos}}.{{$permiso->id_permisos}}"
+                                        wire:key="{{ $modulo->id_modulos }}-{{ $permiso->id_permisos }}" />
+                                </td>
+                                @endforeach
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -69,13 +69,13 @@
                 <!-- Botones al final -->
                 <div class="mt-6 flex justify-end space-x-4">
                     <a href="{{ route('roles.index') }}"
-                       class="px-4 py-2 bg-gray-500 text-white font-bold rounded-lg shadow-md hover:bg-gray-600">
+                        class="px-4 py-2 bg-gray-500 text-white font-bold rounded-lg shadow-md hover:bg-gray-600">
                         Cancelar
                     </a>
 
-                    <button type="submit" 
-                            wire:click.prevent="saveRole"
-                            class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
+                    <button type="submit"
+                        wire:click.prevent="saveRole"
+                        class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
                         Guardar Rol
                     </button>
                 </div>
@@ -86,4 +86,3 @@
         </div>
     </div>
 </div>
-                   

@@ -12,5 +12,4 @@ class Permiso extends Model
     protected $primaryKey = 'id_permisos'; // Definir la clave primaria correctamente
     protected $fillable = ['nombre']; // Asegurar que solo se guarde nombre
     public $timestamps = false;
-
 }

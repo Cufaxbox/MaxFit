@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\RolesController;
@@ -50,4 +51,4 @@ Route::get('/roles/edit/{rol}', [RolesController::class, 'edit'])->name('roles.e
 //Route::get('/AdminActividades', [AdminActividadesController::class, 'index'])->name('AdminActividades.index');
 //Route::get('/AdminTurnos', [AdminActividadesController::class, 'index'])->name('AdminTurnos.index');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

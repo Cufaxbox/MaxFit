@@ -15,7 +15,7 @@
 
                         <label for="nombre" class="block text-gray-700">Nombre:</label>
                         <input type="text" name="nombre" id="nombre" value="{{ $permiso->nombre }}"
-                               class="border border-gray-300 rounded w-full p-2" required>
+                            class="border border-gray-300 rounded w-full p-2" required>
 
                         <!-- Botón de actualizar usando el componente -->
                         <button type="submit"

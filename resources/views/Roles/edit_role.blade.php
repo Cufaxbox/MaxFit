@@ -4,7 +4,7 @@
             Actulizar Rol
         </h2>
     </x-slot>
-   <div class="py-4">
-        <livewire:roles.edit :rolId="$rol->id_roles"/>
+    <div class="py-4">
+        <livewire:roles.edit :rolId="$rol->id_roles" />
     </div>
 </x-app-layout>
