@@ -1,7 +1,10 @@
 <?php
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\ModuloController;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\ModuloPermisoRolController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::view('/', 'welcome');
 
@@ -12,9 +15,27 @@ Route::view('dashboard', 'dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
 /// aca vamos a ir agregando las nuevas rutas
 Route::resource('permisos', PermisoController::class);
 Route::resource('modulos', ModuloController::class);
+
+
+Route::resource('modulo-permiso-rol', ModuloPermisoRolController::class);
+
+Route::resource('roles', RolesController::class);
+
+Route::get('/roles/create', function () {
+    return view('roles.create_role');
+})->name('roles.create_role');
+
+Route::get('/roles/edit/{rol}', [RolesController::class, 'edit'])->name('roles.edit_role');
+//Route::get('/roles/create', [App\Http\Controllers\RolesController::class, 'create'])->name('roles.create');
+
+
+
+
+
 
 //Route::resource('roles', RoleController::class);
 

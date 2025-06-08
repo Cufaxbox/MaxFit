@@ -13,6 +13,12 @@ class Modulo extends Model
     protected $fillable = ['nombre', 'descripcion'];
     public $timestamps = false;
 
+    public function permisos()
+{
+    return $this->belongsToMany(Permiso::class, 'modulo_permiso_rol', 'id_modulos', 'id_permisos');
+}
+
+
 }
 
 
