@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\RolesController;
@@ -20,6 +21,9 @@ Route::view('profile', 'profile')
 /// aca vamos a ir agregando las nuevas rutas
 Route::resource('permisos', PermisoController::class);
 Route::resource('modulos', ModuloController::class);
+Route::resource('actividades', ActividadController::class)->parameters([
+    'actividades' => 'actividad', // Le estamos diciendo que el nombre de la variable es "actividad"
+]);
 
 
 Route::resource('modulo-permiso-rol', ModuloPermisoRolController::class);

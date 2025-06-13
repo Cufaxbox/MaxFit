@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Rol;
 use App\Models\Permiso;
 use App\Models\Modulo;
+use App\Models\Actividad;
 use Illuminate\Support\Facades\DB;
 
 class Create extends Component

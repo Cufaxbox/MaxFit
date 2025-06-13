@@ -45,11 +45,13 @@ new class extends Component
                     <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')" wire:navigate>
                         {{ __('Roles') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('actividades.index')" :active="request()->routeIs('actividades.index')" wire:navigate>
+                        {{ __('Actividades') }}
+                    </x-nav-link>
                        <!--<x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Roles  </x-nav-link>
                       <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Usuarios  </x-nav-link>
                        <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Instructor  </x-nav-link>
                         <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Actividades  </x-nav-link>
-                         <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Admin. Actividades </x-nav-link>
                           <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Turnos </x-nav-link>
                           <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Admin. Turnos </x-nav-link> -->
                       
