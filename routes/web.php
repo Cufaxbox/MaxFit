@@ -21,6 +21,8 @@ Route::view('profile', 'profile')
 /// aca vamos a ir agregando las nuevas rutas
 Route::resource('permisos', PermisoController::class);
 Route::resource('modulos', ModuloController::class);
+
+Route::resource('Usuarios', ModuloController::class);
 Route::resource('actividades', ActividadController::class)->parameters([
     'actividades' => 'actividad', // Le estamos diciendo que el nombre de la variable es "actividad"
 ]);
