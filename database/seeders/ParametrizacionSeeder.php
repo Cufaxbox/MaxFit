@@ -16,6 +16,7 @@ class ParametrizacionSeeder extends Seeder
      */
 
     //en esta clase cargamos todos los datos de parametrizacion que utlizamos por default en el sistema
+    // Crea los roles del sistema y sus permisos establecidos
     public function run(): void
     {
         // Permisos basico de sistema
@@ -60,6 +61,13 @@ class ParametrizacionSeeder extends Seeder
             ]
         );
 
+
+        // Creamos el rol Cliente
+        DB::table('roles')->updateOrInsert(
+            ['nombre' => 'Cliente'],
+            ['descripcion' => 'Rol por defecto para usuarios registrados']
+        );
+
         //Asignamos rol Admin al usuario
 
         $adminUserId = DB::table('users')->where('email', 'admin@gmail.com')->value('id');
@@ -82,5 +90,25 @@ class ParametrizacionSeeder extends Seeder
                 ]);
             }
         }
+
+        // Asignar todos los permisos al rol Cliente solo para módulos: Actividades y Reservar Turnos
+        $clienteRoleId = DB::table('roles')->where('nombre', 'Cliente')->value('id_roles');
+
+        $modulosCliente = DB::table('modulos')
+            ->whereIn('nombre', ['Actividades', 'Reservar Turnos'])
+            ->pluck('id_modulos');
+
+        foreach ($modulosCliente as $moduloId) {
+            foreach ($permisoIds as $permisoId) {
+                DB::table('modulo_permiso_rol')->updateOrInsert([
+                    'id_roles' => $clienteRoleId,
+                    'id_modulos' => $moduloId,
+                    'id_permisos' => $permisoId,
+                ]);
+            }
+        }
+
+
+        
     }
 }

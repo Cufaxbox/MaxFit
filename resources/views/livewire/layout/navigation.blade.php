@@ -49,7 +49,11 @@ new class extends Component
                         {{ __('Actividades') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('Usuarios.index')" :active="request()->routeIs('Usuarios.index')" wire:navigate>
+                     <x-nav-link :href="route('modulos.index')" :active="request()->routeIs('modulos.index')" wire:navigate>
+                        {{ __('Modulos') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('usuarios.index')" :active="request()->routeIs('usuarios.index')" wire:navigate>
                         {{ __('Usuarios') }}
                     </x-nav-link>
                        <!--<x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Roles  </x-nav-link>

@@ -5,6 +5,7 @@ use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\ModuloPermisoRolController;
+use App\Http\Controllers\UsuariosController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -20,12 +21,43 @@ Route::view('profile', 'profile')
 
 /// aca vamos a ir agregando las nuevas rutas
 Route::resource('permisos', PermisoController::class);
+
 Route::resource('modulos', ModuloController::class);
 
-Route::resource('Usuarios', ModuloController::class);
 Route::resource('actividades', ActividadController::class)->parameters([
     'actividades' => 'actividad', // Le estamos diciendo que el nombre de la variable es "actividad"
 ]);
+
+
+// VER CON LOS CHICOS MIDDLEWARE EN FUNCIONAMIENTO EJEMPLO CON USUARIOS
+Route::middleware(['auth'])->group(function () {
+    Route::get('usuarios', [UsuariosController::class, 'index'])
+        ->middleware('verificar.permiso:Usuarios,Lectura')
+        ->name('usuarios.index');
+
+    Route::get('usuarios/create', [UsuariosController::class, 'create'])
+        ->middleware('verificar.permiso:Usuarios,Alta')
+        ->name('usuarios.create');
+
+    Route::post('usuarios', [UsuariosController::class, 'store'])
+        ->middleware('verificar.permiso:Usuarios,Alta')
+        ->name('usuarios.store');
+
+    Route::get('usuarios/{usuario}/edit', [UsuariosController::class, 'edit'])
+        ->middleware('verificar.permiso:Usuarios,Modificacion')
+        ->name('usuarios.edit');
+
+    Route::put('usuarios/{usuario}', [UsuariosController::class, 'update'])
+        ->middleware('verificar.permiso:Usuarios,Modificacion')
+        ->name('usuarios.update');
+
+    Route::delete('usuarios/{usuario}', [UsuariosController::class, 'destroy'])
+        ->middleware('verificar.permiso:Usuarios,Baja')
+        ->name('usuarios.destroy');
+});
+
+// RUTA PERSONALIZADA PARA CUANDO NO TENER PERMISOS (hay que hacerla)
+// Route::view('/sin-permiso', 'errors.sin_permiso')->name('sin.permiso');
 
 
 Route::resource('modulo-permiso-rol', ModuloPermisoRolController::class);

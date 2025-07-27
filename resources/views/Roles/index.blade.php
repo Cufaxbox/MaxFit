@@ -34,7 +34,7 @@
                                 <td class="border p-2">{{ $rol->descripcion }}</td>
                                 <td class="border p-2 text-center">
                                     <a href="{{ route('roles.edit_role', $rol->id_roles) }}"
-                                        class="px-3 py-2 bg-yellow-500 text-white font-bold rounded-lg hover:bg-yellow-600">
+                                        class="px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600">
                                         Editar
                                     </a>
                                     <form action="{{ route('roles.destroy', $rol->id_roles) }}" method="POST" class="inline">
