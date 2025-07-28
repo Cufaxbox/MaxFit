@@ -32,6 +32,13 @@ new #[Layout('layouts.guest')] class extends Component
 
         $validated['password'] = Hash::make($validated['password']);
         event(new Registered($user = User::create($validated)));
+
+        // Asignar el rol por defecto
+        $rol = \App\Models\Rol::where('nombre', 'Cliente')->first();
+        if ($rol) {
+            $user->rol()->attach($rol->id_roles);
+        }
+
         Auth::login($user);
         $this->redirect(route('dashboard', absolute: false), navigate: true);
     }

@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -45,4 +46,29 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Crea la relación con la tabla rol
+    public function rol()
+    {
+            return $this->belongsToMany(Rol::class, 'usuario_rol', 'id_usuario', 'id_rol');
+    }
+
+    // Obtenemos el nombre del rol
+    public function getRolNombreAttribute()
+    {
+            return $this->rol->first()?->nombre;
+    }
+
+    public function tienePermiso($moduloNombre, $permisoNombre)
+    {
+        return DB::table('usuario_rol')
+            ->join('modulo_permiso_rol', 'usuario_rol.id_rol', '=', 'modulo_permiso_rol.id_roles')
+            ->join('modulos', 'modulo_permiso_rol.id_modulos', '=', 'modulos.id_modulos')
+            ->join('permisos', 'modulo_permiso_rol.id_permisos', '=', 'permisos.id_permisos')
+            ->where('usuario_rol.id_usuario', $this->id)
+            ->where('modulos.nombre', $moduloNombre)
+            ->where('permisos.nombre', $permisoNombre)
+            ->exists();
+    }
+
 }
