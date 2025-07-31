@@ -10,7 +10,7 @@ class Rol extends Model
     use HasFactory;
     protected $table = 'roles';
     protected $primaryKey = 'id_roles';
-    protected $fillable = ['nombre', 'descripcion'];
+    protected $fillable = ['nombre', 'descripcion', 'es_instructor'];
     public $timestamps = false;
 
     public function modulos()

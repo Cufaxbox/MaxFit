@@ -7,6 +7,7 @@ use App\Models\Rol;
 use App\Models\Permiso;
 use App\Models\Modulo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Edit extends Component
 {
@@ -17,6 +18,7 @@ class Edit extends Component
     public $selectedPermisos = [];
     public $permisos = [];
     public $modulos = [];
+    public $es_instructor = false;
 
     public function mount($rolId)
     {
@@ -27,6 +29,7 @@ class Edit extends Component
         $this->rolId = $rol->id_roles;
         $this->nombre = $rol->nombre;
         $this->descripcion = $rol->descripcion;
+        $this->es_instructor = $rol->es_instructor === true || $rol->es_instructor === 1 || $rol->es_instructor === '1';
         $this->selectedModulos = $rol->modulos->pluck('id_modulos')->toArray();
         //$this->selectedModulos = $rol->modulos()->pluck('id_modulos')->toArray();
         //$this->selectedPermisos = $rol->permisos()->pluck('permisos.id_permisos')->toArray();
@@ -56,9 +59,12 @@ class Edit extends Component
 
     public function updateRole()
     {
+
+        //dd('updateRole se ejecutó', $this->rolId, $this->permisosSeleccionados);
         $this->validate([
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string|max:1000',
+            'es_instructor' => 'boolean',
             'selectedPermisos' => 'array',
             'selectedModulos' => 'array',
         ]);
@@ -74,48 +80,43 @@ class Edit extends Component
         }
 
         $rol = Rol::find($this->rolId);
-        //if (!$rol) {
-        //session()->flash('error', 'Rol no encontrado.');
-        //return;
-        //}
 
         $rol->update([
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion ?? '',
+            'es_instructor' => $this->es_instructor ?? false,
         ]);
 
-        // Obtener permisos actuales en la BD
-        $permisosActuales = DB::table('modulo_permiso_rol')
-            ->where('id_roles', $rol->id_roles)
-            ->pluck('id_permisos', 'id_modulos')
-            ->toArray();
-
-        //Eliminar permisos que ya no están seleccionados
+        // Borrar combinaciones previas
         DB::table('modulo_permiso_rol')
-            ->where('id_roles', $rol->id_roles)
-            ->whereNotIn('id_modulos', $this->selectedModulos)
+            ->where('id_roles', $this->rolId)
             ->delete();
-
-        DB::table('modulo_permiso_rol')
-            ->where('id_roles', $rol->id_roles)
-            ->whereNotIn('id_permisos', array_merge(...array_values($this->selectedPermisos)))
-            ->delete();
-
-        // 🚀 Insertar solo los permisos nuevos
+        //dd('🧹 Delete ejecutado', $this->rolId);
+        // Insertar combinaciones actualizadas
         $datos = [];
-        foreach ($this->selectedModulos as $modulo_id) {
-            if (isset($this->selectedPermisos[$modulo_id])) {
-                foreach (array_keys($this->selectedPermisos[$modulo_id]) as $permiso_id) {
-                    if (!isset($permisosActuales[$modulo_id]) || $permisosActuales[$modulo_id] !== $permiso_id) {
-                        $datos[] = [
-                            'id_roles' => $this->rolId,
-                            'id_modulos' => $modulo_id,
-                            'id_permisos' => $permiso_id
-                        ];
-                    }
+
+        foreach (array_unique($this->selectedModulos) as $modulo_id) {
+            foreach ($this->selectedPermisos[$modulo_id] ?? [] as $permiso_id => $activo) {
+                if ($activo) {
+                    $datos[] = [
+                        'id_roles' => $this->rolId,
+                        'id_modulos' => $modulo_id,
+                        'id_permisos' => $permiso_id,
+                    ];
                 }
             }
         }
+
+        //dd([
+        //    '🧩 selectedModulos' => $this->selectedModulos,
+        //    '🧩 selectedPermisos' => $this->selectedPermisos,
+        //]);
+
+        //$insertados = DB::table('modulo_permiso_rol')
+        //   ->where('id_roles', $this->rolId)
+        //   ->count();
+
+        //dd('✅ Insert finalizado', 'Cantidad total de permisos asignados: ' . $insertados);
 
         if (!empty($datos)) {
             DB::table('modulo_permiso_rol')->insert($datos);

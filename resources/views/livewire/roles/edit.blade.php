@@ -28,6 +28,13 @@
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Descripción del rol" />
                     </div>
+                    <div class="mb-4">
+                        <label class="flex items-center">
+                            <input type="checkbox" wire:model="es_instructor" class="form-checkbox">
+                            <span class="ml-2 text-sm text-gray-700">Instructor</span>
+                        </label>
+                    </div>
+
                 </form>
 
                 <!--Tabla de Módulos y Permisos -->

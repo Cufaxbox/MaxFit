@@ -6,6 +6,7 @@ use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\ModuloPermisoRolController;
 use App\Http\Controllers\UsuariosController;
+use App\Http\Controllers\TurnoPlantillaController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,6 +29,10 @@ Route::resource('actividades', ActividadController::class)->parameters([
     'actividades' => 'actividad', // Le estamos diciendo que el nombre de la variable es "actividad"
 ]);
 
+
+
+
+Route::resource('turno_plantillas', TurnoPlantillaController::class);
 
 // VER CON LOS CHICOS MIDDLEWARE EN FUNCIONAMIENTO EJEMPLO CON USUARIOS
 Route::middleware(['auth'])->group(function () {

@@ -18,6 +18,7 @@ class Create extends Component
     public $selectedModulos = [];
     public $permisos = [];
     public $modulos = [];
+    public $es_instructor = false;
 
     //Cargar permisos y módulos cuando se monta el componente
     public function mount()
@@ -37,6 +38,7 @@ class Create extends Component
         $this->validate([
             'nombre' => 'required|string|max:45',
             'descripcion' => 'nullable|string|max:45',
+            'es_instructor' => 'boolean',
             'selectedPermisos' => 'array',
             'selectedModulos' => 'array',
         ]);
@@ -57,7 +59,8 @@ class Create extends Component
         $rol = Rol::create([
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
-        ])->fresh(); // 🚀 Asegura que Laravel recupere el ID correctamente
+            'es_instructor' => $this->es_instructor ?? false,
+        ])->fresh(); // Asegura que Laravel recupere el ID correctamente
 
         //dd($rol->id, $rol->id_roles);
         //Insertar registros en la tabla intermedia `modulo_permiso_rol`

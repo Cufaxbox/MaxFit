@@ -28,17 +28,17 @@ class ParametrizacionSeeder extends Seeder
 
         //Todos los Modulos del sistema
         $modulos = [
-            ['nombre' => 'Roles', 'descripcion' => 'Gestion de roles y permisos.'],
-            ['nombre' => 'Actividades', 'descripcion' => 'Actividades del sistema. Ej: Natacion, Boxeo, Etc'],
-            ['nombre' => 'Usuarios', 'descripcion' => 'Gestion de Usuarios para asignar Roles'],
-            ['nombre' => 'Configurar Turnos', 'descripcion' => 'Gestion de Turnos asignamos dia y horario a la actividad'],
-            ['nombre' => 'Reservar Turnos', 'descripcion' => 'Gestion de Turnos se puede reservar un turno'],
+            ['nombre' => 'Roles', 'descripcion' => 'Gestión de roles y permisos.', 'ruta_index' => 'roles.index'],
+            ['nombre' => 'Actividades', 'descripcion' => 'Actividades del sistema. Ej: Natación, Boxeo, Etc', 'ruta_index' => 'actividades.index'],
+            ['nombre' => 'Usuarios', 'descripcion' => 'Gestión de Usuarios para asignar Roles', 'ruta_index' => 'usuarios.index'],
+            ['nombre' => 'Configurar Turnos', 'descripcion' => 'Asignamos día y horario a la actividad', 'ruta_index' => 'turno_plantillas.index'],
+            ['nombre' => 'Reservar Turnos', 'descripcion' => 'Permite a los usuarios reservar un turno', 'ruta_index' => 'reservar_turnos.index'],
         ];
 
         foreach ($modulos as $modulo) {
             DB::table('modulos')->updateOrInsert(
                 ['nombre' => $modulo['nombre']],
-                ['descripcion' => $modulo['descripcion']]
+                ['descripcion' => $modulo['descripcion'], 'ruta_index' => $modulo['ruta_index']]
             );
         }
 
@@ -107,8 +107,5 @@ class ParametrizacionSeeder extends Seeder
                 ]);
             }
         }
-
-
-        
     }
 }

@@ -24,9 +24,14 @@ class RolesController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:45|unique:roles,nombre',
             'descripcion' => 'nullable|string|max:45',
+            'es_instructor' => 'nullable|boolean',
         ]);
 
-        Rol::create($request->all());
+        Rol::create([
+            'nombre' => $request->input('nombre'),
+            'descripcion' => $request->input('descripcion'),
+            'es_instructor' => $request->boolean('es_instructor'),
+        ]);
 
         return redirect()->route('roles.index')->with('success', 'Rol creado correctamente.');
     }
@@ -40,8 +45,18 @@ class RolesController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'nombre' => 'required|string|max:45|unique:roles,nombre,' . $id . ',id_roles',
+            'descripcion' => 'nullable|string|max:45',
+            'es_instructor' => 'nullable|boolean',
+        ]);
+
         $rol = Rol::findOrFail($id);
-        $rol->update($request->all());
+        $rol->update([
+            'nombre' => $request->input('nombre'),
+            'descripcion' => $request->input('descripcion'),
+            'es_instructor' => $request->boolean('es_instructor'),
+        ]);
 
         return redirect()->route('roles.index')->with('success', 'Rol actualizado correctamente.');
     }

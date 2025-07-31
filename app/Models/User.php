@@ -50,13 +50,13 @@ class User extends Authenticatable
     // Crea la relación con la tabla rol
     public function rol()
     {
-            return $this->belongsToMany(Rol::class, 'usuario_rol', 'id_usuario', 'id_rol');
+        return $this->belongsToMany(Rol::class, 'usuario_rol', 'id_usuario', 'id_rol');
     }
 
     // Obtenemos el nombre del rol
     public function getRolNombreAttribute()
     {
-            return $this->rol->first()?->nombre;
+        return $this->rol->first()?->nombre;
     }
 
     public function tienePermiso($moduloNombre, $permisoNombre)
@@ -71,4 +71,8 @@ class User extends Authenticatable
             ->exists();
     }
 
+    public function scopeInstructores($query)
+    {
+        return $query->whereHas('rol', fn($q) => $q->where('es_instructor', true));
+    }
 }

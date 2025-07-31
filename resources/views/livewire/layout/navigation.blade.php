@@ -5,16 +5,13 @@ use Livewire\Volt\Component;
 
 new class extends Component
 {
-    /**
-     * Log the current user out of the application.
-     */
     public function logout(Logout $logout): void
     {
         $logout();
-
         $this->redirect('/', navigate: true);
     }
-}; ?>
+}; 
+?>
 
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
@@ -30,40 +27,30 @@ new class extends Component
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <!-- Dashboard fijo -->
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                   
-                     <!--<x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Permisos</x-nav-link> -->
 
-                    <!--<x-nav-link :href="route('permisos.index')" :active="request()->routeIs('permisos.index')" wire:navigate>
-                        {{ __('Permisos') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('modulos.index')" :active="request()->routeIs('modulos.index')" wire:navigate>
-                        {{ __('Modulos') }}
-                    </x-nav-link> -->
-                    <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')" wire:navigate>
-                        {{ __('Roles') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('actividades.index')" :active="request()->routeIs('actividades.index')" wire:navigate>
-                        {{ __('Actividades') }}
-                    </x-nav-link>
+                    <!-- Links dinámicos desde la base de datos -->
+                    @php
+                        use App\Models\Modulo;
+                        use Illuminate\Support\Facades\Route;
 
-                     <x-nav-link :href="route('modulos.index')" :active="request()->routeIs('modulos.index')" wire:navigate>
-                        {{ __('Modulos') }}
-                    </x-nav-link>
+                        $modulos = Modulo::whereNotNull('ruta_index')->get();
+                    @endphp
 
-                    <x-nav-link :href="route('usuarios.index')" :active="request()->routeIs('usuarios.index')" wire:navigate>
-                        {{ __('Usuarios') }}
-                    </x-nav-link>
-                       <!--<x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Roles  </x-nav-link>
-                      <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Usuarios  </x-nav-link>
-                       <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Instructor  </x-nav-link>
-                        <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Actividades  </x-nav-link>
-                          <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Turnos </x-nav-link>
-                          <x-nav-link href="{{ route('permisos.index') }}" class="text-gray-800 px-3 py-2">Admin. Turnos </x-nav-link> -->
-                      
-
+                    @foreach($modulos as $modulo)
+                        @if(Route::has($modulo->ruta_index) && auth()->user()->tienePermiso($modulo->nombre, 'Lectura'))
+                            <x-nav-link
+                                :href="route($modulo->ruta_index)"
+                                :active="request()->routeIs($modulo->ruta_index)"
+                                wire:navigate
+                            >
+                                {{ __($modulo->nombre) }}
+                            </x-nav-link>
+                        @endif
+                    @endforeach
                 </div>
             </div>
 
@@ -73,7 +60,6 @@ new class extends Component
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
-
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -112,9 +98,23 @@ new class extends Component
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            <!-- Dashboard fijo -->
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            <!-- Links dinámicos en responsive -->
+            @foreach($modulos as $modulo)
+                @if(Route::has($modulo->ruta_index) && auth()->user()->tienePermiso($modulo->nombre, 'Lectura'))
+                    <x-responsive-nav-link
+                        :href="route($modulo->ruta_index)"
+                        :active="request()->routeIs($modulo->ruta_index)"
+                        wire:navigate
+                    >
+                        {{ __($modulo->nombre) }}
+                    </x-responsive-nav-link>
+                @endif
+            @endforeach
         </div>
 
         <!-- Responsive Settings Options -->
