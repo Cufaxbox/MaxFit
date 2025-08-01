@@ -10,15 +10,17 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     @if (session('success'))
-                        <x-alertas.success>
-                            {{ session('success') }}
-                        </x-alertas.success>
+                    <x-alertas.success>
+                        {{ session('success') }}
+                    </x-alertas.success>
                     @endif
 
+                    @if($permisos['puedeCrear'])
                     <a href="{{ route('turno_plantillas.create') }}" wire:navigate
                         class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
                         + Nueva Plantilla de Turno
                     </a>
+                    @endif
 
                     <table class="mt-4 w-full border-collapse border border-gray-300">
                         <thead>
@@ -34,33 +36,37 @@
                         </thead>
                         <tbody>
                             @php
-                                $dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+                            $dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
                             @endphp
 
                             @foreach ($plantillas as $plantilla)
-                                <tr class="border border-gray-300">
-                                    <td class="px-4 py-2">{{ $dias[$plantilla->dia_semana] ?? 'Día inválido' }}</td>
-                                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($plantilla->hora_inicio)->format('H:i') }}</td>
-                                    <td class="px-4 py-2">{{ \Carbon\Carbon::parse($plantilla->hora_fin)->format('H:i') }}</td>
-                                    <td class="px-4 py-2">{{ $plantilla->cupo }}</td>
-                                    <td class="px-4 py-2">{{ $plantilla->instructor->name ?? '—' }}</td>
-                                    <td class="px-4 py-2">{{ $plantilla->actividad->nombre ?? '—' }}</td>
-                                    <td class="px-4 py-2 flex justify-center items-center space-x-2">
-                                        <a href="{{ route('turno_plantillas.edit', ['turno_plantilla' => $plantilla->id_turno_plantilla]) }}" wire:navigate
-                                            class="px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600">
-                                            Editar
-                                        </a>
-
-                                        <form action="{{ route('turno_plantillas.destroy', ['turno_plantilla' => $plantilla->id_turno_plantilla]) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="px-4 py-2 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600">
-                                                Eliminar
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                            <tr class="border border-gray-300">
+                                <td class="px-4 py-2">{{ $dias[$plantilla->dia_semana] ?? 'Día inválido' }}</td>
+                                <td class="px-4 py-2">{{ \Carbon\Carbon::parse($plantilla->hora_inicio)->format('H:i') }}</td>
+                                <td class="px-4 py-2">{{ \Carbon\Carbon::parse($plantilla->hora_fin)->format('H:i') }}</td>
+                                <td class="px-4 py-2">{{ $plantilla->cupo }}</td>
+                                <td class="px-4 py-2">{{ $plantilla->instructor->name ?? '—' }}</td>
+                                <td class="px-4 py-2">{{ $plantilla->actividad->nombre ?? '—' }}</td>
+                                <td class="px-4 py-2 flex justify-center items-center space-x-2">
+                                
+                                 @if($permisos['puedeEditar'])
+                                    <a href="{{ route('turno_plantillas.edit', ['turno_plantilla' => $plantilla->id_turno_plantilla]) }}" wire:navigate
+                                        class="px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600">
+                                        Editar
+                                    </a>
+                                @endif
+                                    <form action="{{ route('turno_plantillas.destroy', ['turno_plantilla' => $plantilla->id_turno_plantilla]) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                         @if($permisos['puedeEliminar'])
+                                        <button type="submit"
+                                            class="px-4 py-2 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600">
+                                            Eliminar
+                                        </button>
+                                         @endif
+                                    </form>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>

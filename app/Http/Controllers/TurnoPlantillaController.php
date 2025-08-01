@@ -7,25 +7,35 @@ use App\Models\User;
 use App\Models\Actividad;
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\Traits\ProtegePorPermiso;
+use App\Http\Helpers\ProtegePorPermiso;
 
 
 class TurnoPlantillaController extends Controller
 {
 
+    public array $permisos;
+
     public function __construct()
     {
-       // foreach (ProtegePorPermiso::middlewarePorModulo('TurnoPlantillas') as [$middleware, $actions]) {
-       //     $this->middleware($middleware)->only($actions);
-       // }
-
+        foreach (ProtegePorPermiso::middlewarePorModulo('Configurar Turnos') as [$middleware, $actions]) {
+            $this->middleware($middleware)->only($actions);
+        }
     }
+
+    public function mount()
+    {
+        $this->permisos = ProtegePorPermiso::flagsPorModulo('Configurar Turnos');
+    }
+
 
     public function index()
     {
         $plantillas = TurnoPlantilla::with(['instructor', 'actividad'])->get();
-        return view('turno_plantillas.index', compact('plantillas'));
+        $permisos = ProtegePorPermiso::flagsPorModulo('Configurar Turnos');
+
+        return view('turno_plantillas.index', compact('plantillas', 'permisos'));
     }
+
 
     public function create()
     {

@@ -5,14 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Actividad;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Http\Helpers\ProtegePorPermiso;
 
 class ActividadController extends Controller
 {
+
+    public array $permisos;
+
+    public function __construct()
+    {
+        foreach (ProtegePorPermiso::middlewarePorModulo('Actividades') as [$middleware, $actions]) {
+            $this->middleware($middleware)->only($actions);
+        }
+    }
+
+        public function mount()
+    {
+        $this->permisos = ProtegePorPermiso::flagsPorModulo('Actividades');
+    }
+
+
     public function index()
     {
+        $permisos = ProtegePorPermiso::flagsPorModulo('Actividades');
         $actividades = Actividad::all();
-        return view('actividades.index', compact('actividades'));
+        return view('actividades.index', compact('actividades','permisos'));
     }
 
 

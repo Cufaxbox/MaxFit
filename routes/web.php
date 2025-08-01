@@ -30,12 +30,8 @@ Route::resource('actividades', ActividadController::class)->parameters([
     'actividades' => 'actividad', // Le estamos diciendo que el nombre de la variable es "actividad"
 ]);
 
-
-
-
 Route::resource('turno_plantillas', TurnoPlantillaController::class);
 Route::resource('reservar_turno', ReservaTurnoController::class);
-
 Route::post('/reservar/{id}/{semana}', [ReservaTurnoController::class, 'reservar'])->name('reservar_turno.reservar');
 Route::post('/cancelar/{id}/{semana}', [ReservaTurnoController::class, 'cancelar'])->name('reservar_turno.cancelar');
 

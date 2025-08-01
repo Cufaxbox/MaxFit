@@ -5,13 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use App\Models\Rol;
 use Illuminate\Http\Request;
+use App\Http\Helpers\ProtegePorPermiso;
+
 
 class RolesController extends Controller
 {
+
+     public array $permisos;
+
+        public function __construct()
+    {
+        foreach (ProtegePorPermiso::middlewarePorModulo('Roles') as [$middleware, $actions]) {
+            $this->middleware($middleware)->only($actions);
+        }
+    }
+
+        public function mount()
+    {
+        $this->permisos = ProtegePorPermiso::flagsPorModulo('Roles');
+    }
+
     public function index()
     {
+
+        $permisos = ProtegePorPermiso::flagsPorModulo('Roles');
         $roles = Rol::all();
-        return view('roles.index', compact('roles'));
+        return view('roles.index', compact('roles','permisos'));
     }
 
     public function create()

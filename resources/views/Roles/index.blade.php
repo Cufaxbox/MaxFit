@@ -14,11 +14,12 @@
                         {{ session('success') }}
                     </x-alertas.success>
                     @endif
+                    @if($permisos['puedeCrear'])
                     <a href="{{ route('roles.create_role') }}"
                         class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
                         + Crear Nuevo Rol
                     </a>
-
+                    @endif
                     <table class="w-full mt-4 border-collapse border border-gray-300">
                         <thead>
                             <tr class="bg-gray-200">
@@ -33,16 +34,21 @@
                                 <td class="border p-2">{{ $rol->nombre }}</td>
                                 <td class="border p-2">{{ $rol->descripcion }}</td>
                                 <td class="border p-2 text-center">
+
+                                    @if($permisos['puedeEditar'])
                                     <a href="{{ route('roles.edit_role', $rol->id_roles) }}"
                                         class="px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600">
                                         Editar
                                     </a>
+                                    @endif
                                     <form action="{{ route('roles.destroy', $rol->id_roles) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
+                                        @if($permisos['puedeEliminar'])
                                         <button type="submit" class="px-3 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600">
                                             Eliminar
                                         </button>
+                                        @endif
                                     </form>
                                 </td>
                             </tr>

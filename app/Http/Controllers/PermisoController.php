@@ -5,10 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\Permiso;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Http\Helpers\ProtegePorPermiso;
 
 class PermisoController extends Controller
 {
+
+    public array $permisos;
+    
+    public function __construct()
+    {
+        foreach (ProtegePorPermiso::middlewarePorModulo('Permisos') as [$middleware, $actions]) {
+            $this->middleware($middleware)->only($actions);
+        }
+    }
+
+    public function mount()
+    {
+        $this->permisos = ProtegePorPermiso::flagsPorModulo('Permisos');
+    }
+
     public function index()
     {
         $permisos = Permiso::all();
