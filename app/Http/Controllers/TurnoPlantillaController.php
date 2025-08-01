@@ -7,8 +7,20 @@ use App\Models\User;
 use App\Models\Actividad;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Traits\ProtegePorPermiso;
+
+
 class TurnoPlantillaController extends Controller
 {
+
+    public function __construct()
+    {
+       // foreach (ProtegePorPermiso::middlewarePorModulo('TurnoPlantillas') as [$middleware, $actions]) {
+       //     $this->middleware($middleware)->only($actions);
+       // }
+
+    }
+
     public function index()
     {
         $plantillas = TurnoPlantilla::with(['instructor', 'actividad'])->get();
