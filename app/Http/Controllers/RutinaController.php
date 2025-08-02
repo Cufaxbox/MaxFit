@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Helpers\ProtegePorPermiso;
+use App\Models\Rutina;
+use App\Models\User;
+use Illuminate\Http\Request;
+
+class RutinaController extends Controller
+{
+
+    public array $permisos;
+
+    public function __construct()
+    {
+        foreach (ProtegePorPermiso::middlewarePorModulo('Rutinas') as [$middleware, $actions]) {
+            $this->middleware($middleware)->only($actions);
+        }
+    }
+
+    public function mount()
+    {
+        $this->permisos = ProtegePorPermiso::flagsPorModulo('Rutinas');
+    }
+
+    public function index(Request $request)
+    {
+        $permisos = ProtegePorPermiso::flagsPorModulo('Rutinas');
+        $tipo = $request->get('tipo');
+
+        $usuarios = User::query()
+        ->whereHas('rol', function ($q) use ($request) {
+            if ($request->tipo === 'cliente') {
+                $q->where('es_instructor', false)->where('nombre', 'Cliente');
+            } elseif ($request->tipo === 'instructor') {
+                $q->where('es_instructor', true)->where('nombre', 'Instructor');
+            } elseif ($request->tipo === 'admin') {
+                $q->where('nombre', 'Admin');
+            }
+        })
+        ->when($request->filled('email'), function ($q) use ($request) {
+            $q->where('email', 'like', '%' . $request->email . '%');
+        })
+        ->get();
+
+
+        $rutinas = Rutina::all();
+
+        return view('rutinas.index', compact('rutinas', 'permisos', 'usuarios'));
+    }
+
+    public function create(Request $request)
+    {
+        $clienteId = $request->get('cliente_id');
+        $cliente = User::findOrFail($clienteId);
+        return view('rutinas.create', compact('cliente'));
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'descripcion' => 'required|string|max:255',
+            'cliente_id' => 'required|exists:users,id',
+        ]);
+
+        Rutina::create([
+            'descripcion' => $request->descripcion,
+            'cliente_id' => $request->cliente_id,
+        ]);
+
+        return redirect()->route('rutinas.index')->with('success', 'Rutina asignada con éxito.');
+    }
+
+    public function edit($id)
+    {
+        $rutina = Rutina::findOrFail($id);
+        return view('rutinas.edit', compact('rutina'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $rutina = Rutina::findOrFail($id);
+
+        $request->validate([
+            'descripcion' => 'required|string|max:255',
+        ]);
+
+        $rutina->update([
+            'descripcion' => $request->descripcion,
+        ]);
+
+        return redirect()->route('rutinas.index')->with('success', 'Rutina actualizada correctamente.');
+    }
+
+
+    public function createParaUsuario($usuarioId)
+    {
+        $cliente = User::findOrFail($usuarioId);
+        return view('rutinas.create', compact('cliente'));
+    }
+
+    public function editParaUsuario($usuarioId)
+    {
+        $cliente = User::findOrFail($usuarioId);
+        $rutina = Rutina::where('cliente_id', $usuarioId)->first();
+
+        if (!$rutina) {
+            return redirect()->back()->with('error', 'Este usuario aún no tiene rutina asignada.');
+        }
+
+        return view('rutinas.edit', compact('cliente', 'rutina'));
+    }
+
+}

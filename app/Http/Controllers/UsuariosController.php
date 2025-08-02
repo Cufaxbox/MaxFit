@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\ProtegePorPermiso;
 use App\Models\User;
 use App\Models\Rol;
 use Illuminate\Http\Request;
@@ -9,10 +10,25 @@ use Illuminate\Support\Facades\Hash;
 
 class UsuariosController extends Controller
 {
+    public array $permisos;
+    
+    public function __construct()
+    {
+        foreach (ProtegePorPermiso::middlewarePorModulo('Usuarios') as [$middleware, $actions]) {
+            $this->middleware($middleware)->only($actions);
+        }
+    }
+
+    public function mount()
+    {
+        $this->permisos = ProtegePorPermiso::flagsPorModulo('Usuarios');
+    }
+
     public function index()
     {
+        $permisos = ProtegePorPermiso::flagsPorModulo('Usuarios');
         $usuarios = User::with('rol')->get();
-        return view('usuarios.index', compact('usuarios'));
+        return view('usuarios.index', compact('usuarios', 'permisos'));
     }
 
     public function create()

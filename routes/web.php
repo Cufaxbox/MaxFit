@@ -9,6 +9,7 @@ use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\TurnoPlantillaController;
 use App\Http\Controllers\ReservaTurnoController;
 use App\Http\Controllers\MisTurnosController;
+use App\Http\Controllers\RutinaController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,32 +45,11 @@ Route::post('/cancelar/{id}/{semana}', [ReservaTurnoController::class, 'cancelar
 
 //Route::post('/gestionar-turno', [ReservaTurnoController::class, 'gestionar'])->name('gestionar.turno'); //USUAMSO POST YA QUE NO GENERAMOS UN IDEX UN CREATE O UN EDIT
 
-// VER CON LOS CHICOS MIDDLEWARE EN FUNCIONAMIENTO EJEMPLO CON USUARIOS
-Route::middleware(['auth'])->group(function () {
-    Route::get('usuarios', [UsuariosController::class, 'index'])
-        ->middleware('verificar.permiso:Usuarios,Lectura')
-        ->name('usuarios.index');
+Route::resource('usuarios', UsuariosController::class);
 
-    Route::get('usuarios/create', [UsuariosController::class, 'create'])
-        ->middleware('verificar.permiso:Usuarios,Alta')
-        ->name('usuarios.create');
-
-    Route::post('usuarios', [UsuariosController::class, 'store'])
-        ->middleware('verificar.permiso:Usuarios,Alta')
-        ->name('usuarios.store');
-
-    Route::get('usuarios/{usuario}/edit', [UsuariosController::class, 'edit'])
-        ->middleware('verificar.permiso:Usuarios,Modificacion')
-        ->name('usuarios.edit');
-
-    Route::put('usuarios/{usuario}', [UsuariosController::class, 'update'])
-        ->middleware('verificar.permiso:Usuarios,Modificacion')
-        ->name('usuarios.update');
-
-    Route::delete('usuarios/{usuario}', [UsuariosController::class, 'destroy'])
-        ->middleware('verificar.permiso:Usuarios,Baja')
-        ->name('usuarios.destroy');
-});
+Route::get('/usuarios/{usuario}/rutinas/create', [RutinaController::class, 'createParaUsuario'])->name('usuarios.rutinas.create');
+Route::get('/usuarios/{usuario}/rutinas/edit', [RutinaController::class, 'editParaUsuario'])->name('usuarios.rutinas.edit');
+Route::resource('rutinas', RutinaController::class);
 
 // RUTA PERSONALIZADA PARA CUANDO NO TENER PERMISOS (hay que hacerla)
 // Route::view('/sin-permiso', 'errors.sin_permiso')->name('sin.permiso');

@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->rol->first()?->nombre;
     }
 
+    public function rutina()
+    {
+        return $this->hasOne(Rutina::class, 'cliente_id');
+    }
+
     public function tienePermiso($moduloNombre, $permisoNombre)
     {
         return DB::table('usuario_rol')
