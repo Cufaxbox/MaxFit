@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -41,24 +42,24 @@ class ReservaTurno extends Model
     }
 
     public static function tieneReserva($idUsuario, $idTurnoPlantilla, $fechaTurno): bool
-{
-    return self::where('id_usuario', $idUsuario)
-               ->where('id_turno_plantilla', $idTurnoPlantilla)
-               ->where('fecha_turno', $fechaTurno)
-               ->where('estado', 'confirmada')
-               ->exists();
-}
-
-// app/Models/ReservaTurno.php
-
-public function cancelar(): void
-{
-    if ($this->estado !== 'confirmada') {
-        throw new \Exception('Solo se pueden cancelar reservas confirmadas.');
+    {
+        return self::where('id_usuario', $idUsuario)
+            ->where('id_turno_plantilla', $idTurnoPlantilla)
+            ->where('fecha_turno', $fechaTurno)
+            ->where('estado', 'confirmada')
+            ->exists();
     }
 
-    $this->estado = 'cancelada';
-    $this->save();
-}
+    // app/Models/ReservaTurno.php
+
+    public function cancelar(): void
+    {
+        if ($this->estado !== 'confirmada') {
+            throw new \Exception('Solo se pueden cancelar reservas confirmadas.');
+        }
+
+        $this->estado = 'cancelada';
+        $this->save();
+    }
 
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\ModuloPermisoRolController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\TurnoPlantillaController;
 use App\Http\Controllers\ReservaTurnoController;
+use App\Http\Controllers\MisTurnosController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -31,6 +32,8 @@ Route::resource('actividades', ActividadController::class)->parameters([
 ]);
 
 Route::resource('turno_plantillas', TurnoPlantillaController::class);
+Route::resource('mis_turnos', MisTurnosController::class);
+
 Route::resource('reservar_turno', ReservaTurnoController::class);
 Route::post('/reservar/{id}/{semana}', [ReservaTurnoController::class, 'reservar'])->name('reservar_turno.reservar');
 Route::post('/cancelar/{id}/{semana}', [ReservaTurnoController::class, 'cancelar'])->name('reservar_turno.cancelar');
