@@ -33,6 +33,7 @@ class ParametrizacionSeeder extends Seeder
             ['nombre' => 'Usuarios', 'descripcion' => 'Gestión de Usuarios para asignar Roles', 'ruta_index' => 'usuarios.index'],
             ['nombre' => 'Configurar Turnos', 'descripcion' => 'Asignamos día y horario a la actividad', 'ruta_index' => 'turno_plantillas.index'],
             ['nombre' => 'Reservar Turnos', 'descripcion' => 'Permite a los usuarios reservar un turno', 'ruta_index' => 'reservar_turno.index'],
+            ['nombre' => 'Mis Turnos', 'descripcion' => 'Permite a los usuarios ver sus turnos', 'ruta_index' => 'mis_turnos.index'],
         ];
 
         foreach ($modulos as $modulo) {
