@@ -21,10 +21,13 @@
                             <label for="tipo" class="mr-2 font-semibold">Filtrar por Tipo:</label>
                             <select name="tipo" id="tipo" class="border border-gray-300 rounded p-2 px-8">
                                 <option value="">Todos</option>
-                                <option value="cliente" {{ request('tipo') === 'cliente' ? 'selected' : '' }}>Cliente</option>
-                                <option value="instructor" {{ request('tipo') === 'instructor' ? 'selected' : '' }}>Instructor</option>
-                                <option value="admin" {{ request('tipo') === 'admin' ? 'selected' : '' }}>Admin</option>
+                                @foreach(\App\Models\Rol::all() as $rol)
+                                    <option value="{{ strtolower($rol->nombre) }}" {{ request('tipo') === strtolower($rol->nombre) ? 'selected' : '' }}>
+                                        {{ $rol->nombre }}
+                                    </option>
+                                @endforeach
                             </select>
+
                         </div>
 
                         <!-- Búsqueda -->

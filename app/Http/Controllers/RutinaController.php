@@ -27,28 +27,33 @@ class RutinaController extends Controller
     public function index(Request $request)
     {
         $permisos = ProtegePorPermiso::flagsPorModulo('Rutinas');
-        $tipo = $request->get('tipo');
 
         $usuarios = User::query()
-        ->whereHas('rol', function ($q) use ($request) {
-            if ($request->tipo === 'cliente') {
-                $q->where('es_instructor', false)->where('nombre', 'Cliente');
-            } elseif ($request->tipo === 'instructor') {
-                $q->where('es_instructor', true)->where('nombre', 'Instructor');
-            } elseif ($request->tipo === 'admin') {
-                $q->where('nombre', 'Admin');
-            }
-        })
-        ->when($request->filled('email'), function ($q) use ($request) {
-            $q->where('email', 'like', '%' . $request->email . '%');
-        })
-        ->get();
+            ->when($request->filled('tipo'), function ($q) use ($request) {
+                $q->whereHas('rol', function ($q2) use ($request) {
+                    $tipo = strtolower($request->tipo);
 
+                    // Filtramos por nombre del rol (insensible a mayúsculas)
+                    $q2->whereRaw('LOWER(nombre) = ?', [$tipo]);
+
+                    // Extra: si querés seguir usando el flag es_instructor también:
+                    if ($tipo === 'cliente') {
+                        $q2->where('es_instructor', false);
+                    } elseif ($tipo === 'instructor') {
+                        $q2->where('es_instructor', true);
+                    }
+                });
+            })
+            ->when($request->filled('email'), function ($q) use ($request) {
+                $q->where('email', 'like', '%' . $request->email . '%');
+            })
+            ->get();
 
         $rutinas = Rutina::all();
 
         return view('rutinas.index', compact('rutinas', 'permisos', 'usuarios'));
     }
+
 
     public function create(Request $request)
     {
