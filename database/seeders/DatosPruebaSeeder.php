@@ -86,6 +86,35 @@ class DatosPruebaSeeder extends Seeder
             );
         }
 
+        //Usuarios fijos para login de prueba
+        $usuariosDemo = [
+            ['email' => 'instructor@demo.com',    'name' => 'Instructor Demo',    'rol' => 'Instructor'],
+            ['email' => 'admin@demo.com',         'name' => 'Admin Demo',         'rol' => 'Administrativo'],
+            ['email' => 'cliente@demo.com',       'name' => 'Cliente Demo',       'rol' => 'Cliente'],
+        ];
+
+        foreach ($usuariosDemo as $demo) {
+            $rolId = DB::table('roles')->where('nombre', $demo['rol'])->value('id_roles');
+
+            DB::table('users')->updateOrInsert(
+                ['email' => $demo['email']],
+                [
+                    'name' => $demo['name'],
+                    'password' => Hash::make('1234'),
+                    'email_verified_at' => now(),
+                    'remember_token' => Str::random(10),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
+
+            $userId = DB::table('users')->where('email', $demo['email'])->value('id');
+            DB::table('usuario_rol')->updateOrInsert([
+                'id_usuario' => $userId,
+                'id_rol' => $rolId,
+            ]);
+        }
+
 
         //Generamos un pool de usuarios 5 instructores , 2 asministrativos y 20 usuarios
         $faker = Faker::create('es_AR'); // Español de Argentina
