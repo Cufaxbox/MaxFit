@@ -56,6 +56,8 @@ new #[Layout('layouts.guest')] class extends Component
         </a>
             <div class="hidden md:flex space-x-8 text-sm">
                 <a href="{{ url('/') }}" class="text-gray-300 hover:text-yellow-500 transition">INICIO</a>
+                <a href="{{ route('quienes-somos') }}" class="text-white hover:text-yellow-500 transition">QUIÉNES SOMOS</a>
+                <a href="{{ route('contacto') }}" class="text-white hover:text-yellow-500 transition">CONTACTO</a>
                 <a href="{{ route('login') }}" class="text-gray-300 hover:text-yellow-500 transition" wire:navigate>INICIAR SESIÓN</a>
                 <a href="{{ route('register') }}" class="text-yellow-500 font-semibold">REGISTRARSE</a>
             </div>

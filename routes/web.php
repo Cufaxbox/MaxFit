@@ -24,6 +24,9 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+Route::view('/quienes-somos', 'QuienesSomos.index')->name('quienes-somos');
+Route::view('/contacto', 'Contacto.index')->name('contacto');
+
 /// aca vamos a ir agregando las nuevas rutas
 Route::resource('permisos', PermisoController::class);
 
