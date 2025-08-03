@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         //Llamamos al sedd de parametrizacion para datos basico
         $this->call([
             ParametrizacionSeeder::class,
+            DatosPruebaSeeder::class,
         ]);
         
 

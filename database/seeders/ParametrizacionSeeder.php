@@ -65,11 +65,6 @@ class ParametrizacionSeeder extends Seeder
         );
 
 
-        // Creamos el rol Cliente
-        DB::table('roles')->updateOrInsert(
-            ['nombre' => 'Cliente'],
-            ['descripcion' => 'Rol por defecto para usuarios registrados']
-        );
 
         //Asignamos rol Admin al usuario
 
@@ -94,6 +89,13 @@ class ParametrizacionSeeder extends Seeder
             }
         }
 
+        
+        /* Creamos el rol Cliente
+        DB::table('roles')->updateOrInsert(
+            ['nombre' => 'Cliente'],
+            ['descripcion' => 'Rol por defecto para usuarios registrados']
+        );
+
         // Asignar todos los permisos al rol Cliente solo para módulos: Actividades y Reservar Turnos
         $clienteRoleId = DB::table('roles')->where('nombre', 'Cliente')->value('id_roles');
 
@@ -109,6 +111,6 @@ class ParametrizacionSeeder extends Seeder
                     'id_permisos' => $permisoId,
                 ]);
             }
-        }
+        }*/
     }
 }
