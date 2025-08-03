@@ -3,29 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MA FIT - Entrena a Alto Nivel</title>
+    <title>MAXFIT - Entrena a Alto Nivel</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        .hero-bg {
-            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7)), url('{{ asset("images/banner-ppl.png") }}');
-            background-size: cover;
-            background-position: center;
-        }
-        .exercise-card {
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        .exercise-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7));
-        }
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-black text-white">
     <!-- Header -->
@@ -71,7 +51,7 @@
     </section>
 
     <!-- Ejercicios Disponibles -->
-    <section class="py-20 bg-gray-900">
+    <section class="py-20 bg-[#121212]">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center mb-12">
                 <h2 class="text-4xl font-bold">Ejercicios disponibles</h2>
@@ -140,14 +120,12 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 py-12">
+    <footer class="bg-[#121212] py-12">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-8">
-                <div class="text-2xl font-bold mb-4">
-                    <span class="text-white">MA</span>
-                    <span class="text-yellow-500">FIT</span>
-                </div>
-            </div>
+            <div class="flex justify-center mb-8">
+    <img src="{{ asset('images/logo-maxfit.png') }}" alt="Logo MA FIT" class="h-10 w-auto">
+</div>
+
             <div class="flex justify-center space-x-8 mb-8">
                 <a href="#" class="text-gray-400 hover:text-white transition">Inicio</a>
                 <a href="#" class="text-gray-400 hover:text-white transition">Políticas de privacidad</a>

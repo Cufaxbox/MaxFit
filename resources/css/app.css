@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Estilos de welcome.blade.php */
+
+.hero-bg {
+    background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7)), url("/public/images/banner-ppl.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.exercise-card {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.exercise-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7));
+}
+
+.login-bg {
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7)), url("/public/images/login.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.register-bg {
+    background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7)), url("/public/images/register.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.dashboard-card {
+    background-color: rgba(33, 33, 33, 0.8);
+    border: 1px solid #444;
+    backdrop-filter: blur(6px);
+    color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+

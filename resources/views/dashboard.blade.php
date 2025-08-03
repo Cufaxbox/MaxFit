@@ -1,17 +1,17 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
+    <div class="py-12 bg-[#121212] min-h-screen">
+        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-[#212121]/80 backdrop-blur-md shadow-xl sm:rounded-xl border border-gray-700">
+                <div class="dashboard-card">
+    {{ __("¡Estás dentro! Bienvenido al panel de control.") }}
+            </div>
             </div>
         </div>
     </div>

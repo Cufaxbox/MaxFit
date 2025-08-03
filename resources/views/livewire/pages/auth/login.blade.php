@@ -24,8 +24,7 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div class="min-h-screen bg-cover bg-center relative" 
-     style="background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.7)), url('{{ asset('images/login.png') }}');">
+<div class="min-h-screen bg-cover bg-center relative login-bg">
     
     <!-- Header Navigation -->
     <header class="absolute top-0 w-full z-50">

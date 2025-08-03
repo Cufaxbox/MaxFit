@@ -1,61 +1,69 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             Lista de Actividades
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="bg-[#1e1e1e] overflow-hidden shadow sm:rounded-lg">
+                <div class="p-6 text-gray-100">
+
                     @if (session('success'))
-                    <x-alertas.success>
-                        {{ session('success') }}
-                    </x-alertas.success>
+                        <x-alertas.success>
+                            {{ session('success') }}
+                        </x-alertas.success>
                     @endif
 
-                     @if($permisos['puedeCrear'])
-                    <a href="{{ route('actividades.create') }}" wire:navigate
-                        class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
-                        + Nueva Actividad
-                    </a>
+                    @if($permisos['puedeCrear'])
+                        <a href="{{ route('actividades.create') }}" wire:navigate
+                           class="inline-block mb-4 px-4 py-2 bg-yellow-500 text-black font-medium rounded-md shadow hover:bg-yellow-600 transition">
+                            + Nueva Actividad
+                        </a>
                     @endif
-                    <table class="mt-4 w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-200">
-                                <th class="border border-gray-300 px-4 py-2">Nombre</th>
-                                <th class="border border-gray-300 px-4 py-2">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($actividades as $actividad)
-                            <tr class="border border-gray-300">
-                                <td class="px-4 py-2">{{ $actividad->nombre }}</td>
-                                <td class="px-4 py-2 flex justify-center items-center space-x-2">
 
-                                  @if($permisos['puedeEditar'])
-                                    <a href="{{ route('actividades.edit', ['actividad' => $actividad->id_actividades]) }}" wire:navigate
-                                        class="px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600">
-                                        Editar
-                                    </a>
-                                    @endif
-                                    <form action="{{ route('actividades.destroy', ['actividad' => $actividad->id_actividades]) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-sm text-left text-gray-300 border border-gray-700">
+                            <thead class="bg-gray-800 text-gray-300">
+                                <tr>
+                                    <th class="px-4 py-3 border-b border-gray-700">Nombre</th>
+                                    <th class="px-4 py-3 border-b border-gray-700 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($actividades as $actividad)
+                                    <tr class="hover:bg-gray-900 transition">
+                                        <td class="px-4 py-2 border-b border-gray-700">{{ $actividad->nombre }}</td>
+                                        <td class="px-4 py-2 border-b border-gray-700 flex justify-center items-center gap-2">
 
-                                        @if($permisos['puedeEliminar'])
-                                        <button type="submit"
-                                            class="px-4 py-2 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600">
-                                            Eliminar
-                                        </button>
-                                        @endif
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                            @if($permisos['puedeEditar'])
+                                                <a href="{{ route('actividades.edit', ['actividad' => $actividad->id_actividades]) }}"
+                                                   wire:navigate
+                                                   class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition font-medium">
+                                                    Editar
+                                                </a>
+                                            @endif
+
+                                            @if($permisos['puedeEliminar'])
+                                                <form action="{{ route('actividades.destroy', ['actividad' => $actividad->id_actividades]) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                            onclick="return confirm('¿Estás seguro de que querés eliminar esta actividad?')"
+                                                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition font-medium">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            @endif
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
