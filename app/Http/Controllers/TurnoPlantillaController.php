@@ -59,6 +59,14 @@ class TurnoPlantillaController extends Controller
 
         ]);
 
+        ///Validamos que no se pueda dar un instructor mismo dia y fecha
+        if ($this->hayColisionDeTurno($request->only(['dia_semana', 'hora_inicio', 'hora_fin', 'instructor_id']))) {
+            return back()->withErrors([
+                'instructor_id' => 'Este instructor ya tiene un turno asignado en ese horario y día.',
+            ])->withInput();
+        }
+
+
         TurnoPlantilla::create([
             'dia_semana'     => (int) $request->dia_semana,
             'hora_inicio'    => $request->hora_inicio,
@@ -94,6 +102,13 @@ class TurnoPlantillaController extends Controller
 
         ]);
 
+        ///Validamos que no se pueda dar un instructor mismo dia y fecha
+        if ($this->hayColisionDeTurno($request->only(['dia_semana', 'hora_inicio', 'hora_fin', 'instructor_id']))) {
+            return back()->withErrors([
+                'instructor_id' => 'Este instructor ya tiene un turno asignado en ese horario y día.',
+            ])->withInput();
+        }
+
         $plantilla = TurnoPlantilla::findOrFail($id);
         $plantilla->update([
             'dia_semana'     => (int) $request->dia_semana,
@@ -113,5 +128,21 @@ class TurnoPlantillaController extends Controller
         TurnoPlantilla::destroy($id);
         return redirect()->route('turno_plantillas.index')
             ->with('success', 'Turno plantilla eliminada.');
+    }
+
+    private function hayColisionDeTurno(array $datos, ?int $excluirId = null): bool
+    {
+        return TurnoPlantilla::where('dia_semana', $datos['dia_semana'])
+            ->where('instructor_id', $datos['instructor_id'])
+            ->when($excluirId, fn($q) => $q->where('id', '!=', $excluirId))
+            ->where(function ($query) use ($datos) {
+                $query->whereBetween('hora_inicio', [$datos['hora_inicio'], $datos['hora_fin']])
+                    ->orWhereBetween('hora_fin', [$datos['hora_inicio'], $datos['hora_fin']])
+                    ->orWhere(function ($q) use ($datos) {
+                        $q->where('hora_inicio', '<=', $datos['hora_inicio'])
+                            ->where('hora_fin', '>=', $datos['hora_fin']);
+                    });
+            })
+            ->exists();
     }
 }

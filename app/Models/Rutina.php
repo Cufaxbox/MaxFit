@@ -11,7 +11,8 @@ class Rutina extends Model
 
     protected $table = 'rutinas'; // nombre de la tabla
     protected $primaryKey = 'id'; // clave primaria
-    protected $fillable = ['descripcion', 'cliente_id']; // campos asignables
+    protected $fillable = ['descripcion', 'cliente_id', 'asignado_por_id'];
+
 
     public $timestamps = false;
 
@@ -19,5 +20,11 @@ class Rutina extends Model
     public function cliente()
     {
         return $this->belongsTo(User::class, 'cliente_id');
+    }
+
+    //Relacion quein asigno
+    public function asignador()
+    {
+        return $this->belongsTo(User::class, 'asignado_por_id');
     }
 }
