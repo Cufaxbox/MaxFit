@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\MisRutinasController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\RolesController;
@@ -34,6 +35,7 @@ Route::resource('actividades', ActividadController::class)->parameters([
 
 Route::resource('turno_plantillas', TurnoPlantillaController::class);
 Route::resource('mis_turnos', MisTurnosController::class);
+Route::resource('mis_rutinas', MisRutinasController::class);
 
 Route::resource('reservar_turno', ReservaTurnoController::class);
 Route::post('/reservar/{id}/{semana}', [ReservaTurnoController::class, 'reservar'])->name('reservar_turno.reservar');

@@ -24,7 +24,7 @@ class MisTurnosController extends Controller
         $idUsuario = optional(Auth::user())->id;
 
         $turnos = ReservaTurno::with(['turnoPlantilla.actividad', 'turnoPlantilla.instructor'])
-            ->where('id_usuario', $idUsuario)->get();
+            ->where('id_usuario', $idUsuario)->orderByDesc('fecha_turno')->paginate(10);
 
         return view('mis_turnos.index', compact('turnos', 'permisos'));
     }

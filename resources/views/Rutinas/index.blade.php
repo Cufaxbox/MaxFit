@@ -10,9 +10,9 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     @if (session('success'))
-                        <x-alertas.success>
-                            {{ session('success') }}
-                        </x-alertas.success>
+                    <x-alertas.success>
+                        {{ session('success') }}
+                    </x-alertas.success>
                     @endif
 
                     <form method="GET" action="{{ route('rutinas.index') }}" class="mb-4 flex items-center gap-4 flex-wrap">
@@ -22,9 +22,9 @@
                             <select name="tipo" id="tipo" class="border border-gray-300 rounded p-2 px-8">
                                 <option value="">Todos</option>
                                 @foreach(\App\Models\Rol::all() as $rol)
-                                    <option value="{{ strtolower($rol->nombre) }}" {{ request('tipo') === strtolower($rol->nombre) ? 'selected' : '' }}>
-                                        {{ $rol->nombre }}
-                                    </option>
+                                <option value="{{ strtolower($rol->nombre) }}" {{ request('tipo') === strtolower($rol->nombre) ? 'selected' : '' }}>
+                                    {{ $rol->nombre }}
+                                </option>
                                 @endforeach
                             </select>
 
@@ -54,30 +54,30 @@
                         </thead>
                         <tbody>
                             @foreach ($usuarios as $usuario)
-                                <tr class="border border-gray-300">
-                                    <td class="px-4 py-2">{{ $usuario->name }}</td>
-                                    <td class="px-4 py-2">{{ $usuario->email }}</td>
-                                    <td class="px-4 py-2">{{ $usuario->rol_nombre ?? '-' }}</td>
-                                    <td class="px-4 py-2 flex justify-center items-center space-x-2">
-                                        @php
-                                            $tieneRutina = $rutinas->contains('cliente_id', $usuario->id);
-                                        @endphp
+                            <tr class="border border-gray-300">
+                                <td class="px-4 py-2">{{ $usuario->name }}</td>
+                                <td class="px-4 py-2">{{ $usuario->email }}</td>
+                                <td class="px-4 py-2">{{ $usuario->rol_nombre ?? '-' }}</td>
+                                <td class="px-4 py-2 flex justify-center items-center space-x-2">
+                                    @php
+                                    $tieneRutina = $rutinas->contains('cliente_id', $usuario->id);
+                                    @endphp
 
-                                        @if (!$tieneRutina)
-                                            <a href="{{ route('usuarios.rutinas.create', $usuario->id) }}" wire:navigate
-                                                class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
-                                                Asignar Rutina
-                                            </a>
-                                        @endif
+                                    @if (!$tieneRutina)
+                                    <a href="{{ route('usuarios.rutinas.create', $usuario->id) }}" wire:navigate
+                                        class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
+                                        Asignar Rutina
+                                    </a>
+                                    @endif
 
-                                        @if ($tieneRutina)
-                                            <a href="{{ route('usuarios.rutinas.edit', $usuario->id) }}" wire:navigate
-                                                class="px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600">
-                                                Editar Rutina
-                                            </a>
-                                        @endif
-                                    </td>
-                                </tr>
+                                    @if ($tieneRutina)
+                                    <a href="{{ route('usuarios.rutinas.edit', $usuario->id) }}" wire:navigate
+                                        class="px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600">
+                                        Editar Rutina
+                                    </a>
+                                    @endif
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -85,4 +85,9 @@
             </div>
         </div>
     </div>
+    @if($usuarios->hasPages())
+    <div class="mt-6 flex justify-center bg-gray-100 p-4 rounded shadow">
+        {{ $usuarios->appends(request()->query())->links() }}
+    </div>
+    @endif
 </x-app-layout>

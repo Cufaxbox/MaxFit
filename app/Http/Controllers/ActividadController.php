@@ -28,7 +28,8 @@ class ActividadController extends Controller
     public function index()
     {
         $permisos = ProtegePorPermiso::flagsPorModulo('Actividades');
-        $actividades = Actividad::all();
+        //$actividades = Actividad::all();
+        $actividades = Actividad::paginate(10); // 10 por página
         return view('actividades.index', compact('actividades','permisos'));
     }
 

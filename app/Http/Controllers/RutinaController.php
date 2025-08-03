@@ -6,6 +6,7 @@ use App\Http\Helpers\ProtegePorPermiso;
 use App\Models\Rutina;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RutinaController extends Controller
 {
@@ -47,7 +48,10 @@ class RutinaController extends Controller
             ->when($request->filled('email'), function ($q) use ($request) {
                 $q->where('email', 'like', '%' . $request->email . '%');
             })
-            ->get();
+            //->get();
+            ->paginate(10)
+            ->appends($request->query());
+
 
         $rutinas = Rutina::all();
 
@@ -71,6 +75,8 @@ class RutinaController extends Controller
         Rutina::create([
             'descripcion' => $request->descripcion,
             'cliente_id' => $request->cliente_id,
+            'asignado_por_id' => Auth::id(), // 👈 el usuario logueado
+
         ]);
 
         return redirect()->route('rutinas.index')->with('success', 'Rutina asignada con éxito.');
