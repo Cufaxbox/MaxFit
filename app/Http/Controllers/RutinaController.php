@@ -48,7 +48,10 @@ class RutinaController extends Controller
             ->when($request->filled('email'), function ($q) use ($request) {
                 $q->where('email', 'like', '%' . $request->email . '%');
             })
-            ->get();
+            //->get();
+            ->paginate(10)
+            ->appends($request->query());
+
 
         $rutinas = Rutina::all();
 

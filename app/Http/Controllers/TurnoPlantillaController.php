@@ -30,7 +30,8 @@ class TurnoPlantillaController extends Controller
 
     public function index()
     {
-        $plantillas = TurnoPlantilla::with(['instructor', 'actividad'])->get();
+        //$plantillas = TurnoPlantilla::with(['instructor', 'actividad'])->get();
+        $plantillas = TurnoPlantilla::with(['instructor', 'actividad'])->paginate(10);
         $permisos = ProtegePorPermiso::flagsPorModulo('Configurar Turnos');
 
         return view('turno_plantillas.index', compact('plantillas', 'permisos'));

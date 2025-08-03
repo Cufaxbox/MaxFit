@@ -155,4 +155,9 @@
             </div>
         </div>
     </div>
+    @if($turnosPaginados->hasPages())
+    <div class="mt-6 flex justify-center bg-gray-100 p-4 rounded shadow">
+        {{ $turnosPaginados->appends(request()->query())->links() }}
+    </div>
+    @endif
 </x-app-layout>

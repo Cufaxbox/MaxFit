@@ -27,7 +27,7 @@ class UsuariosController extends Controller
     public function index()
     {
         $permisos = ProtegePorPermiso::flagsPorModulo('Usuarios');
-        $usuarios = User::with('rol')->get();
+        $usuarios = User::with('rol')->paginate(10);
         return view('usuarios.index', compact('usuarios', 'permisos'));
     }
 

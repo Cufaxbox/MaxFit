@@ -27,7 +27,7 @@ class MisRutinasController extends Controller
 
         $rutinas = Rutina::with('asignador')
         ->where('cliente_id', $idUsuario)
-        ->get();
+        ->paginate(10);
 
         return view('mis_rutinas.index', compact('rutinas'));
     }

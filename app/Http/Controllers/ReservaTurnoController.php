@@ -38,8 +38,10 @@ public function index(Request $request)
         });
     }
 
+    $turnosPaginados = $query->paginate(10); //paginás antes
     // Procesar turnos
-    $turnos = $query->get()
+    //$turnos = $query->get()
+    $turnos = $turnosPaginados
         ->map(function ($plantilla) use ($inicioSemana, $finSemana, $usuarioId) {
             $offset = ($plantilla->dia_semana + 6) % 7;
             $fechaTurno = $inicioSemana->copy()->addDays($offset);
@@ -73,7 +75,7 @@ public function index(Request $request)
         ->sortBy(fn($t) => $t->fecha_turno)
         ->values();
 
-    return view('Reservar_Turno.index', compact('turnos', 'semana', 'actividades', 'actividadId'));
+    return view('Reservar_Turno.index', compact('turnos', 'semana', 'actividades', 'actividadId', 'turnosPaginados'));
 }
 
 

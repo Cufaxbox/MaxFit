@@ -95,4 +95,9 @@
             </div>
         </div>
     </div>
+    @if($turnos->hasPages())
+    <div class="mt-6 flex justify-center bg-gray-100 p-4 rounded shadow">
+        {{ $turnos->links() }}
+    </div>
+    @endif
 </x-app-layout>
