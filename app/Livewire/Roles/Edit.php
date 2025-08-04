@@ -152,13 +152,21 @@ class Edit extends Component
     //  Verifica que no haya permisos seleccionados sin un módulo
     private function validarPermisosSinModulo(): bool
     {
-
         foreach ($this->selectedPermisos as $modulo_id => $permisos) {
+            $activos = array_filter($permisos, fn($estado) => $estado === true);
+
+            // Si no hay ningún permiso activo, ignoramos ese módulo
+            if (empty($activos)) {
+                continue;
+            }
+
+            // Si hay permisos activos pero el módulo no está seleccionado, es error
             if (!in_array($modulo_id, $this->selectedModulos)) {
                 session()->flash('error', "Hay permisos seleccionados que no pertenecen a ningún módulo válido.");
                 return false;
             }
         }
-        return true; // Todo correcto
+
+        return true;
     }
 }

@@ -11,16 +11,16 @@ use App\Http\Helpers\ProtegePorPermiso;
 class RolesController extends Controller
 {
 
-     public array $permisos;
+    public array $permisos;
 
-        public function __construct()
+    public function __construct()
     {
         foreach (ProtegePorPermiso::middlewarePorModulo('Roles') as [$middleware, $actions]) {
             $this->middleware($middleware)->only($actions);
         }
     }
 
-        public function mount()
+    public function mount()
     {
         $this->permisos = ProtegePorPermiso::flagsPorModulo('Roles');
     }
@@ -30,7 +30,7 @@ class RolesController extends Controller
 
         $permisos = ProtegePorPermiso::flagsPorModulo('Roles');
         $roles = Rol::all();
-        return view('roles.index', compact('roles','permisos'));
+        return view('roles.index', compact('roles', 'permisos'));
     }
 
     public function create()
@@ -95,5 +95,19 @@ class RolesController extends Controller
         $rol->delete();
 
         return redirect()->route('roles.index')->with('success', 'Rol eliminado correctamente.');
+    }
+
+    private function filtrarPermisosActivos(array $selectedPermisos): array
+    {
+        $resultado = [];
+
+        foreach ($selectedPermisos as $moduloId => $permisos) {
+            $activos = array_filter($permisos, fn($estado) => $estado === true);
+            if (!empty($activos)) {
+                $resultado[$moduloId] = $activos;
+            }
+        }
+
+        return $resultado;
     }
 }
