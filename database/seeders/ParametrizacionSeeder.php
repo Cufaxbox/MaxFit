@@ -112,5 +112,7 @@ class ParametrizacionSeeder extends Seeder
                 ]);
             }
         }*/
+    
+            
     }
 }
