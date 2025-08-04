@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-white leading-tight">
             Nueva Rutina
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="bg-[#1e1e1e] overflow-hidden shadow-sm sm:rounded-lg border border-gray-700">
+                <div class="p-6 text-white">
                     <form action="{{ route('rutinas.store') }}" method="POST">
                         @csrf
 
@@ -16,19 +16,24 @@
 
                         <!-- Descripción -->
                         <div class="mb-4">
-                            <label for="descripcion" class="block text-gray-700">Descripción:</label>
-                            <textarea name="descripcion" id="descripcion" rows="4" class="border border-gray-300 rounded w-full p-2" required></textarea>
+                            <label for="descripcion" class="block font-semibold text-white mb-2">Descripción:</label>
+                            <textarea name="descripcion" id="descripcion" rows="4"
+                                class="w-full p-3 rounded border border-gray-700 bg-[#121212] text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                required></textarea>
                         </div>
 
                         <!-- Botones -->
-                        <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">
-                            Guardar Rutina
-                        </button>
+                        <div class="flex items-center gap-4 mt-6">
+                            <button type="submit"
+                                class="px-4 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 shadow transition">
+                                Guardar Rutina
+                            </button>
 
-                        <a href="{{ route('rutinas.index') }}" wire:navigate
-                            class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">
-                            Cancelar
-                        </a>
+                            <a href="{{ route('rutinas.index') }}" wire:navigate
+                                class="px-4 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 shadow transition">
+                                Cancelar
+                            </a>
+                        </div>
                     </form>
                 </div>
             </div>

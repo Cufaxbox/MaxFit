@@ -62,7 +62,7 @@
 
                                         @if (!$tieneRutina)
                                             <a href="{{ route('usuarios.rutinas.create', $usuario->id) }}" wire:navigate
-                                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-blue-700 transition shadow">
+                                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow">
                                                 Asignar Rutina
                                             </a>
                                         @endif
