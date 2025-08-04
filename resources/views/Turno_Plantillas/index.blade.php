@@ -7,7 +7,7 @@
 
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-[#1e1e1e] overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-[#1e1e1e] overflow-hidden shadow-sm sm:rounded-lg shadow border border-gray-700">
                 <div class="p-6 text-gray-100">
                     @if (session('success'))
                         <x-alertas.success>
@@ -17,14 +17,14 @@
 
                     @if($permisos['puedeCrear'])
                         <a href="{{ route('turno_plantillas.create') }}" wire:navigate
-                           class="inline-block mb-4 px-4 py-2 bg-yellow-500 text-black font-medium rounded-md shadow hover:bg-yellow-600 transition">
+                           class="inline-block mb-4 px-4 py-2 bg-yellow-500 text-black font-semibold rounded shadow hover:bg-yellow-600 transition">
                             + Nueva Plantilla de Turno
                         </a>
                     @endif
 
                     <div class="overflow-x-auto">
                         <table class="min-w-full text-sm text-left text-gray-300 border border-gray-700">
-                            <thead class="bg-gray-800 text-gray-300">
+                            <thead class="bg-[#2a2a2a] text-gray-300 uppercase text-xs">
                                 <tr>
                                     <th class="px-4 py-3 border-b border-gray-700">Día</th>
                                     <th class="px-4 py-3 border-b border-gray-700">Inicio</th>
@@ -41,7 +41,7 @@
                                 @endphp
 
                                 @foreach ($plantillas as $plantilla)
-                                    <tr class="hover:bg-gray-900 transition">
+                                    <tr class="hover:bg-[#252525] transition">
                                         <td class="px-4 py-2 border-b border-gray-700">{{ $dias[$plantilla->dia_semana] ?? 'Día inválido' }}</td>
                                         <td class="px-4 py-2 border-b border-gray-700">{{ \Carbon\Carbon::parse($plantilla->hora_inicio)->format('H:i') }}</td>
                                         <td class="px-4 py-2 border-b border-gray-700">{{ \Carbon\Carbon::parse($plantilla->hora_fin)->format('H:i') }}</td>
@@ -52,7 +52,7 @@
                                             @if($permisos['puedeEditar'])
                                                 <a href="{{ route('turno_plantillas.edit', ['turno_plantilla' => $plantilla->id_turno_plantilla]) }}"
                                                    wire:navigate
-                                                   class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition font-medium">
+                                                   class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-medium shadow transition">
                                                     Editar
                                                 </a>
                                             @endif
@@ -63,7 +63,7 @@
                                                     @method('DELETE')
                                                     <button type="submit"
                                                             onclick="return confirm('¿Estás seguro de que querés eliminar esta plantilla?')"
-                                                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition font-medium">
+                                                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 font-medium shadow transition">
                                                         Eliminar
                                                     </button>
                                                 </form>
@@ -79,9 +79,10 @@
             </div>
         </div>
     </div>
+
     @if($plantillas->hasPages())
-    <div class="mt-6 flex justify-center bg-gray-100 p-4 rounded shadow">
-        {{ $plantillas->links() }}
-    </div>
+        <div class="mt-6 flex justify-center bg-[#2a2a2a] p-4 rounded shadow">
+            {{ $plantillas->links() }}
+        </div>
     @endif
 </x-app-layout>

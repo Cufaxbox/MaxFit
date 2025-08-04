@@ -7,10 +7,9 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-[#1e1e1e] overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-[#1e1e1e] overflow-hidden shadow-sm sm:rounded-lg shadow border border-gray-700">
                 <div class="p-6 text-gray-100">
 
-                    {{-- Alertas de éxito --}}
                     @if (session('success'))
                         <x-alertas.success>
                             {{ session('success') }}
@@ -33,8 +32,7 @@
                                 class="bg-[#121212] text-white border border-gray-600 rounded px-2 py-1">
                                 <option value="">Todas</option>
                                 @foreach($actividades as $actividad)
-                                    <option value="{{ $actividad->id_actividades }}"
-                                        {{ (string) request('actividad') === (string) $actividad->id_actividades ? 'selected' : '' }}>
+                                    <option value="{{ $actividad->id_actividades }}" {{ (string) request('actividad') === (string) $actividad->id_actividades ? 'selected' : '' }}>
                                         {{ $actividad->nombre }}
                                     </option>
                                 @endforeach
@@ -43,7 +41,7 @@
 
                         <div class="mt-6 sm:mt-0">
                             <button type="submit"
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow transition">
                                 Filtrar
                             </button>
                         </div>
@@ -77,30 +75,24 @@
                     <div class="overflow-x-auto">
                         <table class="w-full mt-4 border-collapse text-sm">
                             <thead>
-                                <tr class="bg-[#2a2a2a] text-gray-300">
+                                <tr class="bg-[#2a2a2a] text-gray-300 uppercase text-xs">
                                     <th class="border border-gray-700 px-4 py-2">Actividad</th>
                                     <th class="border border-gray-700 px-4 py-2">Instructor</th>
                                     <th class="border border-gray-700 px-4 py-2">Día</th>
                                     <th class="border border-gray-700 px-4 py-2">Hora</th>
                                     <th class="border border-gray-700 px-4 py-2">Cupo</th>
                                     <th class="border border-gray-700 px-4 py-2">Estado</th>
-                                    <th class="border border-gray-700 px-4 py-2">Acción</th>
+                                    <th class="border border-gray-700 px-4 py-2 text-center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody class="text-gray-200">
                                 @forelse ($turnos as $turno)
                                     @php
-                                        $reservasActuales = $turno->reservas()
-                                            ->where('fecha_turno', $turno->fecha_turno)
-                                            ->where('estado', 'confirmada')
-                                            ->count();
+                                        $reservasActuales = $turno->reservas()->where('fecha_turno', $turno->fecha_turno)->where('estado', 'confirmada')->count();
                                         $cupoDisponible = $turno->cupo - $reservasActuales;
-                                        $yaReservado = $turno->reservas()
-                                            ->where('fecha_turno', $turno->fecha_turno)
-                                            ->where('id_usuario', auth()->id())
-                                            ->exists();
+                                        $yaReservado = $turno->reservas()->where('fecha_turno', $turno->fecha_turno)->where('id_usuario', auth()->id())->exists();
                                     @endphp
-                                    <tr class="border border-gray-700">
+                                    <tr class="border border-gray-700 hover:bg-[#252525]">
                                         <td class="px-4 py-2">{{ $turno->actividad->nombre }}</td>
                                         <td class="px-4 py-2">{{ $turno->instructor->name }}</td>
                                         <td class="px-4 py-2">{{ \Carbon\Carbon::parse($turno->fecha_turno)->locale('es')->translatedFormat('l, d \d\e F') }}</td>
@@ -120,14 +112,14 @@
                                                 @default <span class="text-gray-400">Disponible</span>
                                             @endswitch
                                         </td>
-                                        <td class="px-4 py-2">
+                                        <td class="px-4 py-2 text-center">
                                             @if($turno->estado === 'expirado')
                                                 <span class="text-gray-500">Sin acción</span>
                                             @elseif(!$yaReservado && $cupoDisponible > 0)
                                                 <form method="POST" action="{{ route('reservar_turno.reservar', ['id' => $turno->id_turno_plantilla, 'semana' => $semana]) }}">
                                                     @csrf
                                                     <button type="submit"
-                                                            class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                                                        class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 shadow transition">
                                                         Reservar
                                                     </button>
                                                 </form>
@@ -135,7 +127,7 @@
                                                 <form method="POST" action="{{ route('reservar_turno.cancelar', ['id' => $turno->id_turno_plantilla, 'semana' => $semana]) }}">
                                                     @csrf
                                                     <button type="submit"
-                                                            class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                                                        class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 shadow transition">
                                                         Cancelar
                                                     </button>
                                                 </form>
@@ -159,9 +151,10 @@
             </div>
         </div>
     </div>
+
     @if($turnosPaginados->hasPages())
-    <div class="mt-6 flex justify-center bg-gray-100 p-4 rounded shadow">
-        {{ $turnosPaginados->appends(request()->query())->links() }}
-    </div>
+        <div class="mt-6 flex justify-center bg-[#2a2a2a] p-4 rounded shadow">
+            {{ $turnosPaginados->appends(request()->query())->links() }}
+        </div>
     @endif
 </x-app-layout>
