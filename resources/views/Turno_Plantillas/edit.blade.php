@@ -67,7 +67,7 @@
                             </button>
 
                             <a href="{{ route('turno_plantillas.index') }}" wire:navigate
-                               class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded shadow transition">
+                               class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded shadow transition">
                                 Cancelar
                             </a>
                         </div>
