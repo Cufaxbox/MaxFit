@@ -41,10 +41,10 @@
                     clases, explora actividades y lleva el control total de tus progresos.
                 </p>
                 <div class="flex space-x-4">
-                    <a href="/" class="bg-yellow-500 text-black px-8 py-3 rounded font-semibold hover:bg-yellow-400 transition">
+                    <a href="{{ route('register') }}" class="bg-yellow-500 text-black px-8 py-3 rounded font-semibold hover:bg-yellow-400 transition">
                         Agendá tu turno
                     </a>
-                    <a href="/" class="border border-white text-white px-8 py-3 rounded hover:bg-white hover:text-black transition">
+                    <a href="{{ route('register') }}" class="border border-white text-white px-8 py-3 rounded hover:bg-white hover:text-black transition">
                         Calendario
                     </a>
                 </div>
