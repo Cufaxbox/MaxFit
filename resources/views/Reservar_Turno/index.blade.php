@@ -17,7 +17,7 @@
                     @endif
 
                     {{-- Filtros --}}
-                    <form method="GET" action="{{ route('reservar_turno.index') }}" class="flex flex-wrap gap-4 items-center mb-6">
+                    <form method="GET" action="{{ route('reservar_turno.index') }}" class="flex flex-wrap gap-4 items-end mb-6">
                         {{-- Semana --}}
                         <div>
                             <label for="semana" class="block text-sm text-gray-300 mb-1">Semana:</label>

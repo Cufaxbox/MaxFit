@@ -57,7 +57,6 @@
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center mb-12">
                 <h2 class="text-4xl font-bold">Ejercicios disponibles</h2>
-                <a href="#" class="text-yellow-500 hover:underline">Ver más ejercicios</a>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

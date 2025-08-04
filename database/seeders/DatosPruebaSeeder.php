@@ -89,7 +89,7 @@ class DatosPruebaSeeder extends Seeder
         //Usuarios fijos para login de prueba
         $usuariosDemo = [
             ['email' => 'instructor@demo.com','name' => 'Instructor Demo','rol' => 'Instructor'],
-            ['email' => 'admin@demo.com','name' => 'Admin Demo','rol' => 'Administrativo'],
+            ['email' => 'staff@demo.com','name' => 'Staff Demo','rol' => 'Administrativo'],
             ['email' => 'cliente@demo.com','name' => 'Cliente Demo','rol' => 'Cliente'],
         ];
 

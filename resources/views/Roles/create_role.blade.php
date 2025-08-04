@@ -5,13 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-12 bg-[#121212] min-h-screen">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-[#232323] shadow-md sm:rounded-lg">
-                <div class="p-6 text-white">
-                    <livewire:roles.create />
-                </div>
-            </div>
-        </div>
+    <div class="py-4 bg-[#121212] min-h-screen text-white">
+        <livewire:roles.create />
     </div>
 </x-app-layout>
