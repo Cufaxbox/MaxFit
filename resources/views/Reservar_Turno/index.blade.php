@@ -112,6 +112,7 @@
                                                 @default <span class="text-gray-400">Disponible</span>
                                             @endswitch
                                         </td>
+                                        @if($permisos['puedeCrear'])
                                         <td class="px-4 py-2 text-center">
                                             @if($turno->estado === 'expirado')
                                                 <span class="text-gray-500">Sin acción</span>
@@ -135,6 +136,7 @@
                                                 <span class="text-gray-500">Sin acción</span>
                                             @endif
                                         </td>
+                                        @endif
                                     </tr>
                                 @empty
                                     <tr>

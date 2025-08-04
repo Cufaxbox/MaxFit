@@ -8,75 +8,93 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Actividad;
+use App\Http\Helpers\ProtegePorPermiso;
 
 class ReservaTurnoController extends Controller
 {
-public function index(Request $request)
-{
-    $usuarioId = Auth::id();
-    $semana = $request->input('semana');
-    $actividadId = $request->input('actividad'); // filtro por actividad
 
-    // Calcular inicio y fin de semana
-    if ($semana && preg_match('/^(\d{4})-W(\d{2})$/', $semana, $matches)) {
-        $inicioSemana = Carbon::now()->setISODate($matches[1], $matches[2])->startOfWeek(Carbon::MONDAY);
-        $finSemana = $inicioSemana->copy()->endOfWeek(Carbon::SUNDAY);
-    } else {
-        $inicioSemana = Carbon::now()->startOfWeek(Carbon::MONDAY);
-        $finSemana = Carbon::now()->endOfWeek(Carbon::SUNDAY);
-        $semana = $inicioSemana->format('o-\WW');
+    public array $permisos;
+
+    public function __construct()
+    {
+        foreach (ProtegePorPermiso::middlewarePorModulo('Reservar Turnos') as [$middleware, $actions]) {
+            $this->middleware($middleware)->only($actions);
+        }
     }
 
-    // Cargar actividades para el combo
-    $actividades = Actividad::orderBy('nombre')->get();
-
-    // Armar query con filtro por actividad si aplica
-    $query = TurnoPlantilla::with(['actividad', 'instructor']);
-    if ($actividadId) {
-        $query->whereHas('actividad', function ($q) use ($actividadId) {
-            $q->where('id_actividades', $actividadId);
-        });
+    public function mount()
+    {
+        $this->permisos = ProtegePorPermiso::flagsPorModulo('Reservar Turnos');
     }
 
-    $turnosPaginados = $query->paginate(10); //paginás antes
-    // Procesar turnos
-    //$turnos = $query->get()
-    $turnos = $turnosPaginados
-        ->map(function ($plantilla) use ($inicioSemana, $finSemana, $usuarioId) {
-            $offset = ($plantilla->dia_semana + 6) % 7;
-            $fechaTurno = $inicioSemana->copy()->addDays($offset);
+    public function index(Request $request)
+    {
+        $permisos = ProtegePorPermiso::flagsPorModulo('Reservar Turnos');
 
-            if ($fechaTurno->gt($finSemana)) return null;
+        $usuarioId = Auth::id();
+        $semana = $request->input('semana');
+        $actividadId = $request->input('actividad'); // filtro por actividad
 
-            $reserva = ReservaTurno::where('id_usuario', $usuarioId)
-                ->where('id_turno_plantilla', $plantilla->id_turno_plantilla)
-                ->where('fecha_turno', $fechaTurno->toDateString())
-                ->first();
+        // Calcular inicio y fin de semana
+        if ($semana && preg_match('/^(\d{4})-W(\d{2})$/', $semana, $matches)) {
+            $inicioSemana = Carbon::now()->setISODate($matches[1], $matches[2])->startOfWeek(Carbon::MONDAY);
+            $finSemana = $inicioSemana->copy()->endOfWeek(Carbon::SUNDAY);
+        } else {
+            $inicioSemana = Carbon::now()->startOfWeek(Carbon::MONDAY);
+            $finSemana = Carbon::now()->endOfWeek(Carbon::SUNDAY);
+            $semana = $inicioSemana->format('o-\WW');
+        }
 
-            $reservadas = ReservaTurno::where('id_turno_plantilla', $plantilla->id_turno_plantilla)
-                ->where('fecha_turno', $fechaTurno->toDateString())
-                ->where('estado', 'confirmada')
-                ->count();
+        // Cargar actividades para el combo
+        $actividades = Actividad::orderBy('nombre')->get();
 
-            $fechaTurno->locale('es');
-            $diaTexto = ucfirst($fechaTurno->dayName) . ', ' . $fechaTurno->format('d') . ' de ' . $fechaTurno->translatedFormat('F');
+        // Armar query con filtro por actividad si aplica
+        $query = TurnoPlantilla::with(['actividad', 'instructor']);
+        if ($actividadId) {
+            $query->whereHas('actividad', function ($q) use ($actividadId) {
+                $q->where('id_actividades', $actividadId);
+            });
+        }
 
-            $estado = $this->calcularEstadoTurno($reserva, $fechaTurno, $plantilla);
+        $turnosPaginados = $query->paginate(10); //paginás antes
+        // Procesar turnos
+        //$turnos = $query->get()
+        $turnos = $turnosPaginados
+            ->map(function ($plantilla) use ($inicioSemana, $finSemana, $usuarioId) {
+                $offset = ($plantilla->dia_semana + 6) % 7;
+                $fechaTurno = $inicioSemana->copy()->addDays($offset);
 
-            $plantilla->fecha_turno = $fechaTurno->toDateString();
-            $plantilla->dia_texto = $diaTexto;
-            $plantilla->estado = $estado;
-            $plantilla->cupo_disponible = $plantilla->cupo - $reservadas;
-            $plantilla->hora_texto = $plantilla->hora_inicio->format('H:i') . ' - ' . $plantilla->hora_fin->format('H:i');
+                if ($fechaTurno->gt($finSemana)) return null;
 
-            return $plantilla;
-        })
-        ->filter()
-        ->sortBy(fn($t) => $t->fecha_turno)
-        ->values();
+                $reserva = ReservaTurno::where('id_usuario', $usuarioId)
+                    ->where('id_turno_plantilla', $plantilla->id_turno_plantilla)
+                    ->where('fecha_turno', $fechaTurno->toDateString())
+                    ->first();
 
-    return view('Reservar_Turno.index', compact('turnos', 'semana', 'actividades', 'actividadId', 'turnosPaginados'));
-}
+                $reservadas = ReservaTurno::where('id_turno_plantilla', $plantilla->id_turno_plantilla)
+                    ->where('fecha_turno', $fechaTurno->toDateString())
+                    ->where('estado', 'confirmada')
+                    ->count();
+
+                $fechaTurno->locale('es');
+                $diaTexto = ucfirst($fechaTurno->dayName) . ', ' . $fechaTurno->format('d') . ' de ' . $fechaTurno->translatedFormat('F');
+
+                $estado = $this->calcularEstadoTurno($reserva, $fechaTurno, $plantilla);
+
+                $plantilla->fecha_turno = $fechaTurno->toDateString();
+                $plantilla->dia_texto = $diaTexto;
+                $plantilla->estado = $estado;
+                $plantilla->cupo_disponible = $plantilla->cupo - $reservadas;
+                $plantilla->hora_texto = $plantilla->hora_inicio->format('H:i') . ' - ' . $plantilla->hora_fin->format('H:i');
+
+                return $plantilla;
+            })
+            ->filter()
+            ->sortBy(fn($t) => $t->fecha_turno)
+            ->values();
+
+        return view('Reservar_Turno.index', compact('turnos', 'semana', 'actividades', 'actividadId', 'turnosPaginados', 'permisos'));
+    }
 
 
     private function calcularEstadoTurno($reserva, $fechaTurno, $plantilla)
